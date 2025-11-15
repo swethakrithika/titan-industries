@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TITAN INDUSTRIES | Advanced Packaging Solutions</title>
+
+    <!-- Fonts & icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root{
+            --primary-dark: #004d40;
+            --primary-green: #00796b;
+            --accent-teal: #80cbc4;
+            --light-background: #f8f9fa;
+            --text-color: #343a40;
+            --white: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 10px 30px rgba(0,0,0,0.07);
+
+            /* header/logo control */
+            --header-padding-desktop: 12px;
+            --header-padding-scrolled: 8px;
+            --logo-max-desktop: 160px;
+            --logo-max-tablet: 140px;
+            --logo-max-mobile: 110px;
+        }
+
+        *{ margin:0; padding:0; box-sizing:border-box; }
+        html{ scroll-behavior:smooth; font-size:16px; }
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-background);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Utility */
+        .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
+        .section{ padding:80px 0; }
+        .section-heading{ text-align:center; margin-bottom:60px; font-size:2.5rem; font-weight:600; color:var(--primary-dark); position:relative; }
+        .section-heading::after{ content:''; display:block; width:60px; height:4px; background-color:var(--primary-green); margin:10px auto 0; border-radius:2px; }
+        .btn{ display:inline-block; padding:12px 28px; background-color:var(--primary-green); color:var(--white); text-decoration:none; border-radius:50px; font-weight:600; transition: background-color .3s, transform .3s; border:none; cursor:pointer; }
+        .btn:hover{ background-color:var(--primary-dark); transform:translateY(-3px); }
+
+        .reveal{ opacity:0; transform:translateY(40px); transition: opacity .8s ease-out, transform .8s ease-out; }
+        .reveal.visible{ opacity:1; transform:translateY(0); }
+
+        /* ========== Header ========== */
+        .main-header{
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1100;
+            background: transparent;
+            padding: var(--header-padding-desktop) 0;
+            transition: background-color .35s ease, padding .35s ease, box-shadow .35s ease;
+            will-change: padding, background-color;
+        }
+
+        .main-header.scrolled{
+            background-color: var(--white);
+            padding: var(--header-padding-scrolled) 0;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06); /* fixed invalid rgba in old code */
+        }
+
+        .main-header .container{
+            display:flex;
+            align-items:center;
+            gap:16px;
+        }
+
+        .logo-container{
+            margin-right:auto;
+            display:flex;
+            align-items:center;
+            padding:0;
+        }
+
+        .logo img{
+            display:block;
+            max-height: var(--logo-max-desktop);
+            width:auto;
+            height:auto;
+            transition: max-height .35s ease;
+            line-height:0;
+        }
+
+        /* Nav */
+        .main-nav{ display:flex; align-items:center; gap:28px; }
+        .main-nav ul{ display:flex; list-style:none; align-items:center; gap:28px; margin:0; padding:0; }
+        .main-nav a{ text-decoration:none; color:var(--white); font-weight:500; position:relative; padding-bottom:4px; }
+        .main-header.scrolled .main-nav a{ color:var(--text-color); }
+        .main-nav a::after{ content:''; position:absolute; left:0; bottom:-4px; width:0; height:3px; background:var(--primary-green); transition:width .25s; }
+        .main-nav a:hover::after{ width:100%; }
+        .main-nav a.active{ color:var(--primary-green); }
+
+        .hamburger{
+            display:none;
+            cursor:pointer;
+            font-size:1.8rem;
+            color:var(--white);
+            background:transparent;
+            border:0;
+            align-self:center;
+            z-index:1200;
+        }
+        .main-header.scrolled .hamburger{ color:var(--primary-dark); }
+
+        /* Hero */
+        .hero{
+            min-height:100vh;
+            background: linear-gradient(180deg, #01361a 0%, #004d40 100%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            color:var(--white);
+            padding: 40px 20px;
+        }
+        .hero-content{ max-width:800px; }
+        .hero h1{ font-size:3.5rem; font-weight:700; margin-bottom:20px; line-height:1.2; }
+        .hero p{ font-size:1.2rem; margin-bottom:40px; font-weight:300; }
+
+        /* Products */
+        .products-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:30px; }
+        .product-card{ background:var(--white); border-radius:10px; overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; transition: transform .3s, box-shadow .3s; }
+        .product-card:hover{ transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.1); }
+        .product-card-content{ padding:25px; flex-grow:1; display:flex; flex-direction:column; }
+        .product-card h3{ font-size:1.4rem; color:var(--primary-dark); margin-bottom:10px; }
+        .product-card p{ flex-grow:1; margin-bottom:20px; }
+        .product-card .btn{ align-self:flex-start; }
+
+        /* Carousel */
+        .carousel{ position:relative; width:100%; height:250px; overflow:hidden; background:#f3f3f3; }
+        .carousel-track{ display:flex; height:100%; transition: transform .5s ease-in-out; }
+        .carousel-slide{ min-width:100%; height:100%; }
+        .carousel-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+        .carousel-btn{ position:absolute; top:50%; transform:translateY(-50%); background-color:rgba(255,255,255,0.7); border:none; color:var(--primary-dark); font-size:1.2rem; padding:6px 10px; cursor:pointer; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; transition:background-color .3s; }
+        .carousel-prev{ left:10px; }
+        .carousel-next{ right:10px; }
+        .carousel-dots{ position:absolute; bottom:15px; left:50%; transform:translateX(-50%); display:flex; gap:8px; }
+        .carousel-dot{ width:10px; height:10px; border-radius:50%; background-color:rgba(255,255,255,0.5); cursor:pointer; transition:background-color .3s; }
+        .carousel-dot.active{ background-color:var(--white); }
+
+        /* About, Services, FAQ, CTA — keep your original layouts */
+        .about-grid{ display:grid; grid-template-columns: 1fr; gap:60px; align-items:center; }
+        .about-content h3{ font-size:2rem; color:var(--primary-dark); margin-bottom:20px; }
+        .about-content .milestones{ list-style:none; margin-top:20px; }
+        .about-content .milestones li{ position:relative; padding-left:25px; margin-bottom:10px; }
+        .about-content .milestones li::before{ content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight:900; position:absolute; left:0; top:4px; color:var(--primary-green); }
+        .about-image img{ max-width:100%; height:auto; border-radius:10px; box-shadow:var(--shadow); }
+
+        .services-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:30px; }
+        .service-item{ background:var(--white); padding:40px 30px; text-align:center; border-radius:10px; box-shadow:var(--shadow); transition:transform .3s, box-shadow .3s; }
+        .service-item:hover{ transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.1); }
+        .service-item .icon{ font-size:3rem; color:var(--primary-green); margin-bottom:20px; }
+        .service-item h3{ font-size:1.3rem; margin-bottom:15px; color:var(--primary-dark); }
+
+        .faq-accordion{ max-width:800px; margin:0 auto; }
+        .faq-item{ background:var(--white); margin-bottom:15px; border-radius:10px; box-shadow:var(--shadow); overflow:hidden; }
+        .faq-question{ padding:20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; color:var(--primary-dark); }
+        .faq-question::after{ content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight:900; transition:transform .3s; }
+        .faq-item.active .faq-question::after{ transform:rotate(180deg); }
+        .faq-answer{ max-height:0; overflow:hidden; transition: max-height .5s ease-out, padding .5s ease-out; }
+        .faq-answer p{ padding:0 20px 20px; }
+
+        .cta-block{ background-color:var(--primary-dark); color:var(--white); text-align:center; padding:60px 20px; }
+        .cta-block h2{ font-size:2.2rem; margin-bottom:30px; }
+
+        .contact-grid{ display:grid; grid-template-columns: 1fr 1.2fr; gap:60px; align-items:flex-start; }
+        .contact-info-item{ display:flex; align-items:flex-start; margin-bottom:25px; }
+        .contact-info-item .icon{ font-size:1.5rem; color:var(--primary-green); margin-right:20px; width:30px; text-align:center; }
+        .contact-info-item h4{ font-size:1.2rem; margin-bottom:5px; color:var(--primary-dark); }
+        .contact-map-container{ border-radius:10px; overflow:hidden; box-shadow:var(--shadow); height:100%; min-height:450px; }
+        .contact-map-container iframe{ width:100%; height:100%; border:none; }
+
+        footer{ background-color:var(--primary-dark); color:rgba(255,255,255,0.8); padding-top:60px; }
+        .footer-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:40px; padding-bottom:40px; }
+        .footer-col h4{ font-size:1.2rem; color:var(--white); margin-bottom:20px; position:relative; padding-bottom:10px; }
+        .footer-col h4::after{ content:''; position:absolute; bottom:0; left:0; width:40px; height:2px; background-color:var(--primary-green); }
+        .footer-col ul{ list-style:none; }
+        .footer-col li{ margin-bottom:10px; }
+        .footer-col a{ color:rgba(255,255,255,0.8); text-decoration:none; transition:color .3s, padding-left .3s; }
+        .footer-col a:hover{ color:var(--white); padding-left:5px; }
+
+        .footer-bottom{ border-top:1px solid rgba(255,255,255,0.1); padding:20px 0; text-align:center; font-size:.9rem; }
+
+        .whatsapp-float{ position:fixed; width:60px; height:60px; bottom:30px; right:30px; background-color:#25d366; color:#FFF; border-radius:50px; text-align:center; font-size:30px; box-shadow:2px 2px 10px rgba(0,0,0,0.2); z-index:100; display:flex; align-items:center; justify-content:center; transition:transform .3s ease; text-decoration:none; }
+        .whatsapp-float:hover{ transform:scale(1.1); }
+
+        /* Modal */
+        .modal{ display:none; position:fixed; z-index:1001; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+        .modal-content{ background-color:var(--white); margin:auto; padding:30px; border-radius:10px; max-width:600px; width:90%; position:relative; box-shadow:0 5px 20px rgba(0,0,0,0.3); animation:fadeIn .4s; }
+        @keyframes fadeIn{ from{ opacity:0; transform:scale(0.95); } to{ opacity:1; transform:scale(1); } }
+        .close-button{ color:#aaa; position:absolute; top:10px; right:20px; font-size:28px; font-weight:bold; cursor:pointer; }
+        .close-button:hover, .close-button:focus{ color:var(--primary-dark); }
+        #modal-product-title{ color:var(--primary-dark); margin-bottom:20px; }
+        .modal-contact-info{ margin-top:20px; font-size:.95rem; }
+        .modal-contact-info ul{ list-style:none; padding-top:10px; }
+        .modal-contact-info li{ margin-bottom:8px; }
+        .modal-contact-info a{ color:var(--primary-green); text-decoration:none; }
+        #modal-product-details p{ margin-bottom:10px; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-grid, .contact-grid{ grid-template-columns: 1fr; }
+            .about-image{ margin-top:40px; }
+            :root{ --logo-max-desktop: var(--logo-max-tablet); }
+        }
+
+        @media (max-width: 768px) {
+            html{ font-size:15px; }
+            .section{ padding:60px 0; }
+            .hero h1{ font-size:2.5rem; }
+            .hero p{ font-size:1.1rem; }
+
+            /* Mobile nav panel */
+            .main-nav{
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--primary-dark);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right .5s ease-in-out;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+                z-index:1100;
+            }
+            .main-nav.active{ right: 0; }
+            .main-nav ul{ flex-direction: column; }
+            .main-nav li{ margin:20px 0; margin-left:0; }
+            .main-nav a, .main-header.scrolled .main-nav a{ color:var(--white); font-size:1.2rem; }
+
+            .hamburger{ display:block; z-index:1200; }
+            .hamburger i{ color:var(--white); }
+
+            .logo img{ max-height: var(--logo-max-mobile); }
+
+            .main-header{ padding:8px 0; }
+            .main-header.scrolled{ padding:6px 0; }
+        }
+
+        @media (max-width:480px){
+            .logo img{ max-height:95px; }
+            .hero h1{ font-size:1.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo-container">
+                <a href="#home" class="logo">
+                    <img src="photos/titan logo-Photoroom.png" alt="TITAN Industries Logo">
+                </a>
+            </div>
+
+            <nav class="main-nav" aria-label="Primary">
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <button class="hamburger" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section id="home" class="hero">
+            <div class="hero-content reveal">
+                <h1>“Smart packaging for a smarter world.”</h1>
+                <a href="#contact" class="btn">CONTACT US</a>
+            </div>
+        </section>
+
+        <!-- Products -->
+        <section id="products" class="section">
+            <div class="container">
+                <h2 class="section-heading reveal">Our Premier Products</h2>
+                <div class="products-grid">
+                    <!-- Repeat product-cards (kept your original content) -->
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/strech 1.jpeg.jpg" alt="Stretch Film Roll"></div>
+                                <div class="carousel-slide"><img src="./photos/strech 2.jpeg.jpg" alt="Stretch Film in Use"></div>
+                                <div class="carousel-slide"><img src="./photos/strech 4.jpeg.jpg" alt="Stacked Stretch Film"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>Stretch Film Rolls</h3>
+                            <p>High-quality, durable film for pallet wrapping. Offers excellent puncture resistance and load retention, ensuring stability during transit.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="Stretch Film Rolls" data-details="<p><strong>Quality:</strong> Premium grade, high-tensile strength film available in various microns (thicknesses).</p><p><strong>Wholesale Quantity:</strong> Minimum order of 50 rolls. Bulk discounts available for orders over 200 rolls.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/pp strap 1.jpeg.jpg" alt="PP Strapping Roll"></div>
+                                <div class="carousel-slide"><img src="./photos/pp 2.jpeg.jpg" alt="Colorful PP Straps"></div>
+                                <div class="carousel-slide"><img src="./photos/pp3.jpeg.jpg" alt="PP Strapping Machine"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>PP Strapping Rolls</h3>
+                            <p>Strong and reliable polypropylene strapping for bundling heavy packages. Ideal for both manual and machine applications.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="PP Strapping Rolls" data-details="<p><strong>Quality:</strong> Virgin and semi-virgin grade polypropylene available in various widths (6mm to 19mm) and thicknesses.</p><p><strong>Wholesale Quantity:</strong> Minimum order of 25 cartons. Custom printing available for large orders.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/pet 1.jpeg.jpg" alt="PET Strapping Rolls 1"></div>
+                                <div class="carousel-slide"><img src="./photos/pet 2.jpeg.jpg" alt="PET Strapping Rolls 2"></div>
+                                <div class="carousel-slide"><img src="./photos/pet 4.jpeg.jpg" alt="PET Strapping Rolls 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>PET Strapping Rolls</h3>
+                            <p>A high-tensile strength alternative to steel strapping. Weather-resistant and safe for heavy-duty bundling and load securing.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="PET Strapping Rolls" data-details="<p><strong>Quality:</strong> High-tensile embossed PET strapping, designed for heavy loads. Resistant to UV degradation and weathering.</p><p><strong>Wholesale Quantity:</strong> Minimum order starts at 100 kg. Available in green and black colors.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/sutli 1.jpeg.jpg" alt="PP Sutli Twine 1"></div>
+                                <div class="carousel-slide"><img src="./photos/sutli 2.jpg" alt="PP Sutli Twine 2"></div>
+                                <div class="carousel-slide"><img src="./photos/sutli 3.jpeg" alt="PP Sutli Twine 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>PP Sutli (Plastic Twine)</h3>
+                            <p>Versatile and strong plastic twine used for general-purpose tying, packing, and agricultural applications.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="PP Sutli (Plastic Twine)" data-details="<p><strong>Quality:</strong> Made from 100% virgin polypropylene for superior strength and knot retention.</p><p><strong>Wholesale Quantity:</strong> Sold in bags of 20 kg. Various colors and thicknesses available upon request.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/pp bag.jpeg.jpg" alt="PP Woven Bags 1"></div>
+                                <div class="carousel-slide"><img src="./photos/pp bag 2.jpeg" alt="PP Woven Bags 2"></div>
+                                <div class="carousel-slide"><img src="./photos/pp bag 3.jpeg" alt="PP Woven Bags 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>PP Woven Bags</h3>
+                            <p>Lightweight yet extremely strong woven bags, ideal for packaging bulk goods like grains, sugar, and cement.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="PP Woven Bags" data-details="<p><strong>Quality:</strong> Laminated and unlaminated options available. High tear strength and durable construction.</p><p><strong>Wholesale Quantity:</strong> Minimum order of 1000 bags. Custom sizes and printing options are available for bulk orders.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/bubble 1.jpeg.jpg" alt="Bubble Sheet 1"></div>
+                                <div class="carousel-slide"><img src="./photos/bubble 2.jpeg.jpg" alt="Bubble Sheet 2"></div>
+                                <div class="carousel-slide"><img src="./photos/bubble 3.jpg" alt="Bubble Sheet 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>Bubble Sheet</h3>
+                            <p>Lightweight and flexible plastic sheet with air-filled bubbles, providing excellent cushioning for protecting fragile items during shipping.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="Bubble Sheet" data-details="<p><strong>Quality:</strong> Standard and anti-static bubble sheets. Available in various bubble sizes for different levels of protection.</p><p><strong>Wholesale Quantity:</strong> Minimum order is one full roll (standard sizes vary). Custom perforation and sheet sizes on request.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/pp rpoe 2.jpeg.jpg" alt="PP Rope 1"></div>
+                                <div class="carousel-slide"><img src="./photos/pp rope 2.jpeg" alt="PP Rope 2"></div>
+                                <div class="carousel-slide"><img src="./photos/pp rope 3.jpeg" alt="PP Rope 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>PP Rope</h3>
+                            <p>Extremely strong, lightweight, and durable polypropylene rope, resistant to rot and chemicals. Perfect for industrial use.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="PP Rope" data-details="<p><strong>Quality:</strong> 3-strand and 4-strand twisted ropes made from high-tenacity polypropylene fibers.</p><p><strong>Wholesale Quantity:</strong> Minimum order of 5 coils. Available diameters range from 4mm to 24mm.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/ld sheet roll 1.jpeg.jpg" alt="LD Sheet 1"></div>
+                                <div class="carousel-slide"><img src="./photos/ld roll.jpeg.jpg" alt="LD Sheet 2"></div>
+                                <div class="carousel-slide"><img src="./photos/pvc Ld.jpg" alt="LD Sheet 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>LD Sheet</h3>
+                            <p>Versatile and durable LD sheets suitable for a variety of applications, including packaging, construction, and stationery. Available in multiple thicknesses.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="LD Sheet" data-details="<p><strong>Quality:</strong> Rigid and flexible LD sheets available. Options include clear, colored, and custom finishes.</p><p><strong>Wholesale Quantity:</strong> MOQ varies by thickness and type. Please contact us with your specific requirements for a detailed quote.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/bopp 1.jpeg" alt="BOPP Tape 1"></div>
+                                <div class="carousel-slide"><img src="./photos/bopp 2.jpeg" alt="BOPP Tape 2"></div>
+                                <div class="carousel-slide"><img src="photos/bopp3.jpeg" alt="BOPP Tape 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>BOPP Tape</h3>
+                            <p>High-adhesion Biaxially Oriented Polypropylene (BOPP) tape perfect for sealing cartons and packages securely. Available in various colors and sizes.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="BOPP Tape" data-details="<p><strong>Quality:</strong> Strong acrylic adhesive ensures a secure seal. Available in transparent, brown, and custom printed variants.</p><p><strong>Wholesale Quantity:</strong> Minimum order is one box (72 rolls). Special pricing for pallet quantities.</p>">Learn More</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card reveal">
+                        <div class="carousel product-carousel">
+                            <div class="carousel-track">
+                                <div class="carousel-slide"><img src="./photos/corrugated-sheets-1.jpg" alt="Corrugated Sheet 1"></div>
+                                <div class="carousel-slide"><img src="./photos/corrugated 2.jpeg" alt="Corrugated Sheet 2"></div>
+                                <div class="carousel-slide"><img src="./photos/corrugated3.avif" alt="Corrugated Sheet 3"></div>
+                            </div>
+                            <button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="carousel-dots"></div>
+                        </div>
+                        <div class="product-card-content">
+                            <h3>Corrugated Sheet</h3>
+                            <p>Lightweight, rigid, and recyclable corrugated sheets, perfect for protective packaging, signage, and construction applications.</p>
+                            <a href="#" class="btn learn-more-btn" data-product-name="Corrugated Sheet" data-details="<p><strong>Quality:</strong> Available in 3-ply, 5-ply, and 7-ply configurations with various flute sizes to match your strength requirements.</p><p><strong>Wholesale Quantity:</strong> Minimum order of 500 sheets. Custom dimensions and printing are available.</p>">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-heading reveal">About Us</h2>
+                <div class="about-grid">
+                    <div class="about-content reveal">
+                        <h3>Engineering a Sustainable Future</h3>
+                        <p>
+                            Founded on the principles of quality and innovation, TITAN Industries has been a leading provider of advanced plastic packaging solutions for over a decade. We are committed to engineering sustainable and reliable products that meet the diverse needs of modern industries, while ensuring minimal environmental impact. Our state-of-the-art manufacturing facility and a dedicated team allow us to offer custom-tailored solutions that drive efficiency and success for our clients.
+                        </p>
+                        <ul class="milestones">
+                            <li>ISO 9001:2015 Certified for Quality Management</li>
+                            <li>Serving a Diverse Portfolio of Industries</li>
+                            <li>Committed to Sustainable and Recyclable Materials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section id="services" class="section" style="background-color: var(--white);">
+            <div class="container">
+                <h2 class="section-heading reveal">The TITAN INDUSTRIES Advantage</h2>
+                <div class="services-grid">
+                    <div class="service-item reveal">
+                        <div class="icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Quality Assurance</h3>
+                        <p>Our products undergo rigorous testing to ensure they meet the highest standards of durability and performance.</p>
+                    </div>
+                    <div class="service-item reveal">
+                        <div class="icon"><i class="fas fa-leaf"></i></div>
+                        <h3>Eco-Friendly Materials</h3>
+                        <p>We are committed to sustainability, offering a range of recyclable and environmentally conscious options.</p>
+                    </div>
+                    <div class="service-item reveal">
+                        <div class="icon"><i class="fas fa-cogs"></i></div>
+                        <h3>Custom Solutions</h3>
+                        <p>We work with you to develop tailored packaging solutions that meet your specific requirements and challenges.</p>
+                    </div>
+                    <div class="service-item reveal">
+                        <div class="icon"><i class="fas fa-truck"></i></div>
+                        <h3>Reliable Delivery</h3>
+                        <p>Our efficient logistics network ensures timely and dependable delivery to keep your operations running smoothly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container">
+                <h2 class="section-heading reveal">Have Questions? We Have Answers.</h2>
+                <div class="faq-accordion reveal">
+                    <div class="faq-item">
+                        <div class="faq-question">What types of products do you offer?</div>
+                        <div class="faq-answer">
+                            <p>We offer a wide range of plastic packaging products including Stretch Film, PP & PET Strapping, PP Sutli, PP Woven Bags, Bubble Sheets, PP Ropes and various other Plastic Rolls & Sheets for industrial use.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can you provide custom-sized products?</div>
+                        <div class="faq-answer">
+                            <p>Absolutely. We specialize in creating custom solutions. Please contact our sales team with your specific dimensions, thickness, and quantity requirements, and we will be happy to provide a quote.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What is your minimum order quantity (MOQ)?</div>
+                        <div class="faq-answer">
+                            <p>MOQ varies depending on the product. We are flexible and cater to both large and small-scale orders. Please get in touch with us to discuss your needs.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What are your business hours?</div>
+                        <div class="faq-answer">
+                            <p>Our office is open Monday to Saturday, from 8:30 AM to 7:30 PM. We are closed on Sundays and public holidays.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-block">
+            <div class="container reveal">
+                <h2>Ready to Revolutionize Your Packaging?</h2>
+                <a href="#contact" class="btn">Get a Free Quote Today</a>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-heading reveal">Get In Touch</h2>
+                <div class="contact-grid">
+                    <div class="contact-info reveal">
+                        <div class="contact-info-item">
+                            <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <h4>Our Location</h4>
+                                <p>No 1A, Pollachi Road, Sidco Industrial Eastes, Coimbatore-641021</p>
+                                <a href="https://maps.app.goo.gl/2" target="_blank">Get Directions on Google Maps</a>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="icon"><i class="fas fa-phone-alt"></i></div>
+                            <div>
+                                <h4>Call Us</h4>
+                                <p><a href="tel:+919080611599">+91 90806 11599</a></p>
+                                <p><a href="tel:+919003436602">+91 90034 36602</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="icon"><i class="fas fa-envelope"></i></div>
+                            <div>
+                                <h4>Email Us</h4>
+                                <p><a href="mailto:titanindustry69@gmail.com">titanindustry69@gmail.com</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="icon"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <h4>Business Hours</h4>
+                                <p>Mon - Sat: 8:30 AM - 7:30 PM</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="icon"><i class="fas fa-file-alt"></i></div>
+                            <div>
+                                <h4>GSTIN</h4>
+                                <p>33AWXPD0804E1ZV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-map-container reveal">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.392141560242!2d76.9775585!3d10.9432841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85a4685d3a787%3A0x6bbbc16a9767701e!2sT.P.M.%20TRADERS!5e0!3m2!1sen!2sin!4v1727081130000!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>TITAN Industries</h4>
+                    <p>Your trusted partner for high-quality, innovative, and sustainable plastic packaging solutions since 2025.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:+919080611599">+91 9080611599</a></li>
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:+919003436602">+91 90034 36602</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:titanindustry69@gmail.com">Email Us</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <a href="https://maps.app.goo.gl/2" target="_blank">Coimbatore, TN</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Titan Industries All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="product-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close-button" role="button" aria-label="Close">&times;</span>
+            <h2 id="modal-product-title"></h2>
+            <div id="modal-product-details"></div>
+            <div class="modal-contact-info">
+                <hr>
+                <p>For more information and to place a wholesale order, please contact us:</p>
+                <ul>
+                    <li><strong>Phone:</strong> <a href="tel:+919080611599">+91 90806 11599</a></li>
+                    <li><strong>Email:</strong> <a href="mailto:titanindustry69@gmail.com">titanindustry69@gmail.com</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/919080611599" class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Header scroll & body padding sync ---
+        const header = document.querySelector('.main-header');
+        const hamburger = document.querySelector('.hamburger');
+        const mainNav = document.querySelector('.main-nav');
+
+        function syncBodyPaddingWithHeader() {
+            if (!header) return;
+            const h = header.getBoundingClientRect().height;
+            document.body.style.paddingTop = h + 'px';
+        }
+        // initial sync and on resize (debounced)
+        window.addEventListener('load', syncBodyPaddingWithHeader);
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(syncBodyPaddingWithHeader, 120);
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // mobile nav toggle
+        hamburger.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        mainNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if(mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    const icon = hamburger.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.main-nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // On-scroll reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Reusable carousel logic
+        function initializeCarousel(carouselElement, options = {}) {
+            const track = carouselElement.querySelector('.carousel-track');
+            const slides = Array.from(track.children);
+            const nextButton = carouselElement.querySelector('.carousel-next');
+            const prevButton = carouselElement.querySelector('.carousel-prev');
+            const dotsNav = carouselElement.querySelector('.carousel-dots');
+            let currentIndex = 0;
+            let intervalId;
+
+            const moveToSlide = (targetIndex) => {
+                if (!slides[0]) return;
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                track.style.transform = 'translateX(-' + (slideWidth * targetIndex) + 'px)';
+                currentIndex = targetIndex;
+                updateDots(targetIndex);
+            };
+
+            if (dotsNav) {
+                dotsNav.innerHTML = '';
+                slides.forEach((_, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('carousel-dot');
+                    if (index === 0) button.classList.add('active');
+                    dotsNav.appendChild(button);
+                    button.addEventListener('click', () => {
+                        moveToSlide(index);
+                        resetInterval();
+                    });
+                });
+            }
+
+            const dots = dotsNav ? Array.from(dotsNav.children) : [];
+
+            const updateDots = (targetIndex) => {
+                if (!dotsNav) return;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === targetIndex);
+                });
+            };
+
+            if(nextButton && prevButton){
+                nextButton.addEventListener('click', () => {
+                    const nextIndex = (currentIndex + 1) % slides.length;
+                    moveToSlide(nextIndex);
+                    resetInterval();
+                });
+
+                prevButton.addEventListener('click', () => {
+                    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    moveToSlide(prevIndex);
+                    resetInterval();
+                });
+            }
+
+            const startInterval = () => {
+                if (!options.autoplay) return;
+                intervalId = setInterval(() => {
+                    const nextIndex = (currentIndex + 1) % slides.length;
+                    moveToSlide(nextIndex);
+                }, options.interval || 3000);
+            };
+
+            const resetInterval = () => {
+                if (!options.autoplay) return;
+                clearInterval(intervalId);
+                startInterval();
+            };
+
+            if (options.autoplay) {
+                startInterval();
+                carouselElement.addEventListener('mouseenter', () => clearInterval(intervalId));
+                carouselElement.addEventListener('mouseleave', startInterval);
+            }
+
+            window.addEventListener('resize', () => {
+                if (!slides[0]) return;
+                const newSlideWidth = slides[0].getBoundingClientRect().width;
+                track.style.transition = 'none';
+                track.style.transform = 'translateX(-' + (newSlideWidth * currentIndex) + 'px)';
+                setTimeout(() => { track.style.transition = 'transform .5s ease-in-out'; }, 50);
+            });
+        }
+
+        document.querySelectorAll('.product-carousel').forEach(carousel => {
+            initializeCarousel(carousel, { autoplay: true, interval: 4000 });
+        });
+
+        // FAQ accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-answer').style.maxHeight = 0;
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // Modal logic
+        const modal = document.getElementById('product-modal');
+        const modalTitle = document.getElementById('modal-product-title');
+        const modalDetails = document.getElementById('modal-product-details');
+        const closeButton = document.querySelector('.close-button');
+        const learnMoreButtons = document.querySelectorAll('.learn-more-btn');
+
+        learnMoreButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const productName = this.getAttribute('data-product-name');
+                const productDetails = this.getAttribute('data-details');
+                modalTitle.textContent = productName;
+                modalDetails.innerHTML = productDetails;
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+            });
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        closeButton.addEventListener('click', closeModal);
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) closeModal();
+        });
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeModal();
+        });
+    });
+    </script>
+</body>
+</html>
